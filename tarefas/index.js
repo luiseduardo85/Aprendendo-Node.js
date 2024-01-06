@@ -1,15 +1,25 @@
-const readline = require('readline')
+const express = require('express');
+const app = express();
+const port = 5000;
 
-const interface = readline.createInterface(
-    process.stdin,
-    process.stdout
-);
+const path = require('path');
 
-interface.question('Whats is your age? ', (age) => {
-    for(var i = 0; i < age; i++)
-    var soma = i
-    soma = soma + i 
-    console.log(soma)
-    interface.close()
+const users = require("./users")
+
+const basePath = path.join(__dirname, 'views');
+
+app.use(express.urlencoded({extended: true}));
+
+app.use(express.json());
+
+app.use(express.static("public"));
+
+app.use("/users", users);
+
+app.get("/", (req, res) => {
+    res.sendFile(`${basePath}/home.html`);
+})
+
+app.listen(port, () =>{
+    console.log(`Servidor rodando na porta ${port}`);
 });
-
